@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir pyserial paho-mqtt PyYAML
 
 
 RUN mkdir -p /opt/hacomfoairmqtt
-COPY src/ca350.py /opt/hacomfoairmqtt
-COPY src/config.ini.docker /opt/hacomfoairmqtt/config.ini.docker
+COPY ../src/ca350.py /opt/hacomfoairmqtt
+COPY ../src/config.ini.docker /opt/hacomfoairmqtt/config.ini.docker
 
 COPY rootfs /
