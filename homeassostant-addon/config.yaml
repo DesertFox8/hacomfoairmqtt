@@ -1,0 +1,52 @@
+name: "hacomfoairmqtt"
+version: "0.10.0"
+slug: ca350
+description: >-
+  "Add-on for hacomfoairmqtt and serial over IP"
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+init: false
+uart: true
+services:
+  - mqtt:need
+options:
+  SERIAL_PORT: null
+  REFRESH_INTERVAL: 15
+  ENABLE_PC_MODE: false
+  MQTT_SERVER: null
+  MQTT_PORT: 1883
+  MQTT_USER: null
+  MQTT_PASSWORD: null
+schema:
+  REMOTE_DEVICE: bool?
+  SERIAL_PORT: device(subsystem=tty)?
+  REMOTE_IP: str?
+  REMOTE_PORT: port?
+  RS485_PROTOCOL: bool?
+  REFRESH_INTERVAL: int
+  ENABLE_PC_MODE: bool
+  DEBUG: bool?
+  MQTT_SERVER: str
+  MQTT_PORT: port
+  MQTT_KEEPALIVE: int?
+  MQTT_USER: str?
+  MQTT_PASSWORD: password?
+  HA_ENABLE_AUTO_DISCOVERY_SENSORS: bool?
+  HA_ENABLE_AUTO_DISCOVERY_CLIMATE: bool?
+  HA_AUTO_DISCOVERY_DEVICE_ID: str?
+  HA_AUTO_DISCOVERY_DEVICE_NAME: str?
+  HA_AUTO_DISCOVERY_DEVICE_MANUFACTURER: str?
+  HA_AUTO_DISCOVERY_DEVICE_MODEL: str?
+  DEVICE_SET_FAN_LEVEL_AT_START: bool?
+  DEVICE_FANOUT_ABSENT: int(0,100)?
+  DEVICE_FANOUT_LOW: int(0,100)?
+  DEVICE_FANOUT_MID: int(0,100)?
+  DEVICE_FANOUT_HIGH: int(0,100)?
+  DEVICE_FANIN_ABSENT: int(0,100)?
+  DEVICE_FANIN_LOW: int(0,100)?
+  DEVICE_FANIN_MID: int(0,100)?
+  DEVICE_FANIN_HIGH: int(0,100)?

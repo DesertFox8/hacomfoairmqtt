@@ -1,0 +1,60 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start the example service
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# ==============================================================================
+
+CONFIG_PATH=/data/options.json
+
+SOCAT="$(bashio::config 'REMOTE_DEVICE' 'false')"
+SERIAL_PORT="$(bashio::config 'SERIAL_PORT')"
+
+# Start SOCAT process
+if [[ "${SOCAT,,}" == "true" ]]; then
+    REMOTE_IP="$(bashio::config 'REMOTE_IP' 'localhost')"
+    REMOTE_PORT="$(bashio::config 'REMOTE_PORT' '502')"
+
+    bashio::log.info "create serial device over ethernet with socat for remote device $REMOTE_IP:$REMOTE_PORT"
+    SERIAL_PORT=/dev/comfoair
+    socat -d -d pty,link="$SERIAL_PORT",raw,group-late=dialout,mode=660 tcp:"$REMOTE_IP":"$REMOTE_PORT" &
+else
+    bashio::log.info "Using local serial device '$SERIAL_PORT'"
+fi
+
+bashio::log.info "Creating config.ini"
+
+# build config file
+sed \
+    -e "s|SerialPort=.*|SerialPort=${SERIAL_PORT}|"  \
+    -e "s|RS485_protocol=.*|RS485_protocol=$(bashio::config 'RS485_PROTOCOL' 'false')|"  \
+    -e "s|refresh_interval=.*|refresh_interval=$(bashio::config 'REFRESH_INTERVAL')|"  \
+    -e "s|enablePcMode=.*|enablePcMode=$(bashio::config 'ENABLE_PC_MODE')|"  \
+    -e "s|debug=.*|debug=$(bashio::config 'DEBUG' 'false')|"  \
+    -e "s|MQTTServer=.*|MQTTServer=$(bashio::config 'MQTT_SERVER' 'localhost')|"  \
+    -e "s|MQTTPort=.*|MQTTPort=$(bashio::config 'MQTT_PORT' '1883')|"  \
+    -e "s|MQTTKeepalive=.*|MQTTKeepalive=$(bashio::config 'MQTT_KEEPALIVE' '45')|"  \
+    -e "s|MQTTUser=.*|MQTTUser=$(bashio::config 'MQTT_USER')|"  \
+    -e "s|MQTTPassword=.*|MQTTPassword=$(bashio::config 'MQTT_PASSWORD')|"  \
+    -e "s|HAEnableAutoDiscoverySensors=.*|HAEnableAutoDiscoverySensors=$(bashio::config 'HA_ENABLE_AUTO_DISCOVERY_SENSORS' 'true')|"  \
+    -e "s|HAEnableAutoDiscoveryClimate=.*|HAEnableAutoDiscoveryClimate=$(bashio::config 'HA_ENABLE_AUTO_DISCOVERY_CLIMATE' 'true')|"  \
+    -e "s|HAAutoDiscoveryDeviceId=.*|HAAutoDiscoveryDeviceId=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_ID' 'ca350')|"  \
+    -e "s|HAAutoDiscoveryDeviceName=.*|HAAutoDiscoveryDeviceName=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_NAME' 'CA350')|"  \
+    -e "s|HAAutoDiscoveryDeviceManufacturer=.*|HAAutoDiscoveryDeviceManufacturer=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_MANUFACTURER' 'Zehnder')|"  \
+    -e "s|HAAutoDiscoveryDeviceModel=.*|HAAutoDiscoveryDeviceModel=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_MODEL' 'ComfoAir 350')|"  \
+    -e "s|FanOutAbsent=.*|FanOutAbsent=$(bashio::config 'DEVICE_FANOUT_ABSENT' '15')|" \
+    -e "s|FanOutLow=.*|FanOutLow=$(bashio::config 'DEVICE_FANOUT_LOW' '35')|" \
+    -e "s|FanOutMid=.*|FanOutMid=$(bashio::config 'DEVICE_FANOUT_MID' '50')|" \
+    -e "s|FanOutHigh=.*|FanOutHigh=$(bashio::config 'DEVICE_FANOUT_HIGH' '70')|" \
+    -e "s|FanInAbsent=.*|FanInAbsent=$(bashio::config 'DEVICE_FANIN_ABSENT' '20')|" \
+    -e "s|FanInLow=.*|FanInLow=$(bashio::config 'DEVICE_FANIN_LOW' '40')|" \
+    -e "s|FanInMid=.*|FanInMid=$(bashio::config 'DEVICE_FANIN_MID' '55')|" \
+    -e "s|FanInHigh=.*|FanInHigh=$(bashio::config 'DEVICE_FANIN_HIGH' '75')|" \
+    -e "s|SetUpFanLevelsAtStart=.*|SetUpFanLevelsAtStart=$(bashio::config 'DEVICE_SET_FAN_LEVEL_AT_START' 'true')|" \
+    /opt/hacomfoairmqtt/config.ini.docker >  /opt/hacomfoairmqtt/config.ini
+
+cat /opt/hacomfoairmqtt/config.ini
+
+bashio::log.info "Starting ca350.py"
+
+# Start processing the ComfoAir
+python /opt/hacomfoairmqtt/ca350.py

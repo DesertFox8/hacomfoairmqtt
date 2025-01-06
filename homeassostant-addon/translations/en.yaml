@@ -1,0 +1,44 @@
+---
+configuration:
+  REMOTE_DEVICE:
+    name: Use Remote Device
+    description: "Use a remote ('false') or local ('true') serial device (default: false)"
+  SERIAL_PORT:
+    name: Local Serial Port
+    description: "The serial port where ComfoAir is connected to. In case of Remote Device is will be ignored"
+  REMOTE_IP:
+    name: Remote IP
+    description: "The ip address of the remote ComfoAir device if Remote Device is enabled. (default: 'localhost')"
+  REMOTE_PORT:
+    name: Remote Port
+    description: "The port of the remote ComfoAir device if Remote Device is enabled. (default: 502)"
+  RS485_PROTOCOL:
+    name: RS485 Protocol
+    description: "Enables RS485 protocol instead of RS232 (default: false)"
+  REFRESH_INTERVAL:
+    name: Status Refresh Interval
+    description: "Refresh Interval in Seconds. (default: 10)"
+  ENABLE_PC_MODE:
+    name: Enable Exclusive Control
+    description: "Automaticly enable PC Mode and disable conneced comfosense device which will allow the Add-on to exclusively controlm the ComfoAir. (default: false)"
+  DEBUG:
+    name: Enable Debug
+    description: "Enable Debug Output. (default: false)"
+  MQTT_SERVER:
+    name: MQTT Server
+    description: "IP Adress to your MQTT Server. (default: 'localhost')"
+  MQTT_PORT:
+    name: MQTT Port
+    description: "Port of your MQTT Server. (default: 1883)"
+  MQTT_PORT:
+    name: MQTT Port
+    description: "Port of your MQTT Server. (default: 1883)"
+  MQTT_USER:
+    name: MQTT Username
+    description: "MQTT username. (default: null / No Authentication)"
+  MQTT_PASSWORD:
+    name: MQTT Password
+    description: "MQTT password. (default: null / No Authentication)"
+  MQTT_KEEPALIVE:
+    name: MQTT Keepalive Timeout
+    description: "MQTT Keepalive Settings. (default: 45)"
