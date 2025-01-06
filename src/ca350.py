@@ -33,10 +33,10 @@ config.read(os.path.dirname(os.path.abspath(__file__)) + '/config.ini')
 
 # Service Configuration
 SerialPort = config['DEFAULT']['SerialPort']                   # Serial port CA350 RS232 direct or via USB TTL adapter
-RS485_protocol = config['DEFAULT']['RS485_protocol'] == 'True' # Protocol type
+RS485_protocol = config['DEFAULT'].get('RS485_protocol', 'false').lower() == 'true' # Protocol type
 refresh_interval = int(config['DEFAULT']['refresh_interval'])  # Interval in seconds at which data from RS232 will be polled
-enablePcMode = config['DEFAULT']['enablePcMode'] == 'True'     # automatically enable PC Mode (disable comfosense)
-debug = config['DEFAULT']['debug'] == 'True'
+enablePcMode = config['DEFAULT'].get('enablePcMode', 'false').lower() == 'true'     # automatically enable PC Mode (disable comfosense)
+debug = config['DEFAULT'].get('debug', 'false') == 'true'
 
 #Fan % configuration for each ventilation level
 FanOutAbsent = int(config['DEVICE']['FanOutAbsent'])
@@ -49,7 +49,7 @@ FanInMid = int(config['DEVICE']['FanInMid'])
 FanInHigh = int(config['DEVICE']['FanInHigh'])
 
 #Set fan levels at the start of the program. If false will be only controlled when fans are enabled or disabled.
-SetUpFanLevelsAtStart = config['DEVICE']['SetUpFanLevelsAtStart'] == 'True'
+SetUpFanLevelsAtStart = config['DEVICE'].get('SetUpFanLevelsAtStart', 'false').lower() == 'true'
 
 MQTTServer = config['MQTT']['MQTTServer']            # MQTT broker - IP
 MQTTPort = int(config['MQTT']['MQTTPort'])           # MQTT broker - Port
@@ -57,8 +57,8 @@ MQTTKeepalive = int(config['MQTT']['MQTTKeepalive']) # MQTT broker - keepalive
 MQTTUser = config['MQTT']['MQTTUser']                # MQTT broker - user - default: 0 (disabled/no authentication)
 MQTTPassword = config['MQTT']['MQTTPassword']        # MQTT broker - password - default: 0 (disabled/no authentication)
 
-HAEnableAutoDiscoverySensors = config['HA']['HAEnableAutoDiscoverySensors'] == 'True' # Home Assistant send auto discovery for temperatures
-HAEnableAutoDiscoveryClimate = config['HA']['HAEnableAutoDiscoveryClimate'] == 'True' # Home Assistant send auto discovery for climate
+HAEnableAutoDiscoverySensors = config['HA'].get('HAEnableAutoDiscoverySensors', 'false').lower() == 'true' # Home Assistant send auto discovery for temperatures
+HAEnableAutoDiscoveryClimate = config['HA'].get('HAEnableAutoDiscoveryClimate', 'false').lower() == 'true' # Home Assistant send auto discovery for climate
 
 HAAutoDiscoveryDeviceName = config['HA']['HAAutoDiscoveryDeviceName']            # Home Assistant Device Name
 
