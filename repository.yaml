@@ -1,0 +1,4 @@
+# https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
+name: hacomfoairmqtt Home Assistant add-on repository
+url: 'https://github.com/DesertFox8/hacomfoairmqtt'
+maintainer: DesertFox <DesertFox8@gmail.com>
