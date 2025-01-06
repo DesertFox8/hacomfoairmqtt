@@ -328,6 +328,31 @@ def set_ventilation_level(nr):
 
     if data:
         info_msg('Changed the ventilation to {0}'.format(nr))
+
+        #publish expected status immediately in case reading take some time
+        match nr:
+            case 1:
+                fan_mode = 'off'
+                intakeFanSpeed = FanInAbsent
+                exhaustFanSpeed = FanOutAbsent              
+            case 2:
+                fan_mode = 'low'
+                intakeFanSpeed = FanInLow
+                exhaustFanSpeed = FanOutLow
+            case 3:
+                fan_mode = 'medium'
+                intakeFanSpeed = FanInMid
+                exhaustFanSpeed = FanOutMid
+            case 4:
+                fan_mode = 'high'
+                intakeFanSpeed = FanInHigh
+                exhaustFanSpeed = FanOutHigh
+            
+        publish_message(msg=fan_mode, mqtt_path='comfoair/ha_climate_mode/fan')
+        publish_message(msg=str(intakeFanSpeed), mqtt_path='comfoair/intakefanspeed')
+        publish_message(msg=str(exhaustFanSpeed), mqtt_path='comfoair/exhaustfanspeed')
+
+        time.sleep(2)
         get_ventilation_status()
         get_fan_status()
     else:
