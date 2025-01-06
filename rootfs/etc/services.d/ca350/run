@@ -23,33 +23,61 @@ fi
 
 bashio::log.info "Creating config.ini"
 
+RS485_PROTOCOL=$(bashio::config 'RS485_PROTOCOL' 'false')
+REFRESH_INTERVAL=$(bashio::config 'REFRESH_INTERVAL')
+ENABLE_PC_MODE=$(bashio::config 'ENABLE_PC_MODE')
+DEBUG=$(bashio::config 'DEBUG' 'false')
+
+MQTT_SERVER=$(bashio::config 'MQTT_SERVER' 'localhost')
+MQTT_PORT=$(bashio::config 'MQTT_PORT' '1883')
+MQTT_KEEPALIVE=$(bashio::config 'MQTT_KEEPALIVE' '45')
+MQTT_USER=$(bashio::config 'MQTT_USER')
+MQTT_PASSWORD=$(bashio::config 'MQTT_PASSWORD')
+
+HA_ENABLE_AUTO_DISCOVERY_SENSORS=$(bashio::config 'HA_ENABLE_AUTO_DISCOVERY_SENSORS' 'true')
+HA_ENABLE_AUTO_DISCOVERY_CLIMATE=$(bashio::config 'HA_ENABLE_AUTO_DISCOVERY_CLIMATE' 'true')
+HA_AUTO_DISCOVERY_DEVICE_ID=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_ID' 'ca350')
+HA_AUTO_DISCOVERY_DEVICE_NAME=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_NAME' 'CA350')
+HA_AUTO_DISCOVERY_DEVICE_MANUFACTURER=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_MANUFACTURER' 'Zehnder')
+HA_AUTO_DISCOVERY_DEVICE_MODEL=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_MODEL' 'ComfoAir 350')
+
+DEVICE_FANOUT_ABSENT=$(bashio::config 'DEVICE_FANOUT_ABSENT' '15')
+DEVICE_FANOUT_LOW=$(bashio::config 'DEVICE_FANOUT_LOW' '35')
+DEVICE_FANOUT_MID=$(bashio::config 'DEVICE_FANOUT_MID' '50')
+DEVICE_FANOUT_HIGH=$(bashio::config 'DEVICE_FANOUT_HIGH' '70')
+DEVICE_FANIN_ABSENT=$(bashio::config 'DEVICE_FANIN_ABSENT' '20')
+DEVICE_FANIN_LOW=$(bashio::config 'DEVICE_FANIN_LOW' '40')
+DEVICE_FANIN_MID=$(bashio::config 'DEVICE_FANIN_MID' '55')
+DEVICE_FANIN_HIGH=$(bashio::config 'DEVICE_FANIN_HIGH' '75')
+DEVICE_SET_FAN_LEVEL_AT_START=$(bashio::config 'DEVICE_SET_FAN_LEVEL_AT_START' 'true')
+
 # build config file
 sed \
     -e "s|SerialPort=.*|SerialPort=${SERIAL_PORT}|"  \
-    -e "s|RS485_protocol=.*|RS485_protocol=$(bashio::config 'RS485_PROTOCOL' 'false')|"  \
-    -e "s|refresh_interval=.*|refresh_interval=$(bashio::config 'REFRESH_INTERVAL')|"  \
-    -e "s|enablePcMode=.*|enablePcMode=$(bashio::config 'ENABLE_PC_MODE')|"  \
-    -e "s|debug=.*|debug=$(bashio::config 'DEBUG' 'false')|"  \
-    -e "s|MQTTServer=.*|MQTTServer=$(bashio::config 'MQTT_SERVER' 'localhost')|"  \
-    -e "s|MQTTPort=.*|MQTTPort=$(bashio::config 'MQTT_PORT' '1883')|"  \
-    -e "s|MQTTKeepalive=.*|MQTTKeepalive=$(bashio::config 'MQTT_KEEPALIVE' '45')|"  \
-    -e "s|MQTTUser=.*|MQTTUser=$(bashio::config 'MQTT_USER')|"  \
-    -e "s|MQTTPassword=.*|MQTTPassword=$(bashio::config 'MQTT_PASSWORD')|"  \
-    -e "s|HAEnableAutoDiscoverySensors=.*|HAEnableAutoDiscoverySensors=$(bashio::config 'HA_ENABLE_AUTO_DISCOVERY_SENSORS' 'true')|"  \
-    -e "s|HAEnableAutoDiscoveryClimate=.*|HAEnableAutoDiscoveryClimate=$(bashio::config 'HA_ENABLE_AUTO_DISCOVERY_CLIMATE' 'true')|"  \
-    -e "s|HAAutoDiscoveryDeviceId=.*|HAAutoDiscoveryDeviceId=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_ID' 'ca350')|"  \
-    -e "s|HAAutoDiscoveryDeviceName=.*|HAAutoDiscoveryDeviceName=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_NAME' 'CA350')|"  \
-    -e "s|HAAutoDiscoveryDeviceManufacturer=.*|HAAutoDiscoveryDeviceManufacturer=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_MANUFACTURER' 'Zehnder')|"  \
-    -e "s|HAAutoDiscoveryDeviceModel=.*|HAAutoDiscoveryDeviceModel=$(bashio::config 'HA_AUTO_DISCOVERY_DEVICE_MODEL' 'ComfoAir 350')|"  \
-    -e "s|FanOutAbsent=.*|FanOutAbsent=$(bashio::config 'DEVICE_FANOUT_ABSENT' '15')|" \
-    -e "s|FanOutLow=.*|FanOutLow=$(bashio::config 'DEVICE_FANOUT_LOW' '35')|" \
-    -e "s|FanOutMid=.*|FanOutMid=$(bashio::config 'DEVICE_FANOUT_MID' '50')|" \
-    -e "s|FanOutHigh=.*|FanOutHigh=$(bashio::config 'DEVICE_FANOUT_HIGH' '70')|" \
-    -e "s|FanInAbsent=.*|FanInAbsent=$(bashio::config 'DEVICE_FANIN_ABSENT' '20')|" \
-    -e "s|FanInLow=.*|FanInLow=$(bashio::config 'DEVICE_FANIN_LOW' '40')|" \
-    -e "s|FanInMid=.*|FanInMid=$(bashio::config 'DEVICE_FANIN_MID' '55')|" \
-    -e "s|FanInHigh=.*|FanInHigh=$(bashio::config 'DEVICE_FANIN_HIGH' '75')|" \
-    -e "s|SetUpFanLevelsAtStart=.*|SetUpFanLevelsAtStart=$(bashio::config 'DEVICE_SET_FAN_LEVEL_AT_START' 'true')|" \
+    -e "s|RS485_protocol=.*|RS485_protocol=${RS485_PROTOCOL}|"  \
+    -e "s|refresh_interval=.*|refresh_interval=${REFRESH_INTERVAL}|"  \
+    -e "s|enablePcMode=.*|enablePcMode=${ENABLE_PC_MODE}|"  \
+    -e "s|debug=.*|debug=${DEBUG}|"  \
+    -e "s|MQTTServer=.*|MQTTServer=${MQTT_SERVER}|"  \
+    -e "s|MQTTPort=.*|MQTTPort=${MQTT_PORT}|"  \
+    -e "s|MQTTKeepalive=.*|MQTTKeepalive=${MQTT_KEEPALIVE}|"  \
+    -e "s|MQTTUser=.*|MQTTUser=${MQTT_USER}|"  \
+    -e "s|MQTTPassword=.*|MQTTPassword=${MQTT_PASSWORD}|"  \
+    -e "s|HAEnableAutoDiscoverySensors=.*|HAEnableAutoDiscoverySensors=${HA_ENABLE_AUTO_DISCOVERY_SENSORS}|"  \
+    -e "s|HAEnableAutoDiscoveryClimate=.*|HAEnableAutoDiscoveryClimate=${HA_ENABLE_AUTO_DISCOVERY_CLIMATE}|"  \
+    -e "s|HAAutoDiscoveryDeviceId=.*|HAAutoDiscoveryDeviceId=${HA_AUTO_DISCOVERY_DEVICE_ID}|"  \
+    -e "s|HAAutoDiscoveryDeviceName=.*|HAAutoDiscoveryDeviceName=${HA_AUTO_DISCOVERY_DEVICE_NAME}|"  \
+    -e "s|HAAutoDiscoveryDeviceManufacturer=.*|HAAutoDiscoveryDeviceManufacturer=${HA_AUTO_DISCOVERY_DEVICE_MANUFACTURER}|"  \
+    -e "s|HAAutoDiscoveryDeviceModel=.*|HAAutoDiscoveryDeviceModel=${HA_AUTO_DISCOVERY_DEVICE_MODEL}|"  \
+    -e "s|FanOutAbsent=.*|FanOutAbsent=${DEVICE_FANOUT_ABSENT}|" \
+    -e "s|FanOutLow=.*|FanOutLow=${DEVICE_FANOUT_LOW}|" \
+    -e "s|FanOutMid=.*|FanOutMid=${DEVICE_FANOUT_MID}|" \
+    -e "s|FanOutHigh=.*|FanOutHigh=${DEVICE_FANOUT_HIGH}|" \
+    -e "s|FanInAbsent=.*|FanInAbsent=${DEVICE_FANIN_ABSENT}|" \
+    -e "s|FanInLow=.*|FanInLow=${DEVICE_FANIN_LOW}|" \
+    -e "s|FanInMid=.*|FanInMid=${DEVICE_FANIN_MID}|" \
+    -e "s|FanInHigh=.*|FanInHigh=${DEVICE_FANIN_HIGH}|" \
+    -e "s|SetUpFanLevelsAtStart=.*|SetUpFanLevelsAtStart=${DEVICE_SET_FAN_LEVEL_AT_START}|" \
     /opt/hacomfoairmqtt/config.ini.docker >  /opt/hacomfoairmqtt/config.ini
 
 cat /opt/hacomfoairmqtt/config.ini
