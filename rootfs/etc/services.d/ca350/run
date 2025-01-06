@@ -79,9 +79,7 @@ sed \
     -e "s|FanInHigh=.*|FanInHigh=${DEVICE_FANIN_HIGH}|" \
     -e "s|SetUpFanLevelsAtStart=.*|SetUpFanLevelsAtStart=${DEVICE_SET_FAN_LEVEL_AT_START}|" \
     /opt/hacomfoairmqtt/config.ini.docker >  /opt/hacomfoairmqtt/config.ini
-
-cat /opt/hacomfoairmqtt/config.ini
-
+    
 bashio::log.info "Starting ca350.py"
 
 # Start processing the ComfoAir
