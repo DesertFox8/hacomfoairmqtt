@@ -1,5 +1,5 @@
 name: "hacomfoairmqtt"
-version: "0.10.0"
+version: "0.10.1"
 slug: ca350
 description: >-
   "Add-on for hacomfoairmqtt and serial over IP"
