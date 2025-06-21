@@ -55,6 +55,7 @@ profile example flags=(attach_disconnected,mediate_deleted) {
     /bin/bash rix,
     /bin/echo ix,
     /etc/passwd r,
+    /dev/comfoair rw,
     /dev/tty* rw,
     /dev/serial/** rw,
   }
