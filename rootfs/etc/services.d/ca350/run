@@ -15,7 +15,7 @@ if [[ "${SOCAT,,}" == "true" ]]; then
     REMOTE_PORT="$(bashio::config 'REMOTE_PORT' '502')"
 
     bashio::log.info "create serial device over ethernet with socat for remote device $REMOTE_IP:$REMOTE_PORT"
-    SERIAL_PORT=/dev/comfoair
+    SERIAL_PORT=/tmp/comfoair
     socat -d -d pty,link="$SERIAL_PORT",raw,group-late=dialout,mode=660 tcp:"$REMOTE_IP":"$REMOTE_PORT" &
 else
     bashio::log.info "Using local serial device '$SERIAL_PORT'"
